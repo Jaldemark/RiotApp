@@ -7,7 +7,7 @@ champlist = []
 playerlist = []
 #/lol/match/v4/timelines/by-match/{matchId}
 def getcurrentgamedata(account):
-    try:
+
         URL = "https://euw1.api.riotgames.com/lol/spectator/v4/active-games/by-summoner/"+str(encryptedSummonerId(account,1))+"?api_key="+apikey()
         response = requests.get(URL)
         match = response.json()
@@ -18,7 +18,10 @@ def getcurrentgamedata(account):
             url = "https://euw1.api.riotgames.com/lol/league/v4/positions/by-summoner/"+str(encryptedSummonerId(player['summonerName'],1))+"?api_key="+apikey()
             response = requests.get(url)
             rank= response.json()
-            playerlist.append(rank)
+            if len(rank)==0:
+                playerlist.append([{'summonerName':player['summonerName'],'tier':'unranked','rank':'unranked','wins':'unknown','losses':'unknown'}])
+            else:
+                playerlist.append(rank)
         for champ in match['participants']:
             champlist.append(champ['championId'])
         gen1 = (ban['championId'] for ban in match['bannedChampions'] if ban['teamId']==100)
@@ -38,10 +41,3 @@ def getcurrentgamedata(account):
         print('Player:',playerlist[8][0]['summonerName'], 'Champion:',champIdtoName(champlist[8]),'Rank:',playerlist[8][0]['tier'],playerlist[8][0]['rank'], 'ranked stats:',playerlist[8][0]['wins'],'wins and', playerlist[8][0]['losses'], 'losses.')
         print('Player:',playerlist[9][0]['summonerName'], 'Champion:',champIdtoName(champlist[9]),'Rank:',playerlist[9][0]['tier'],playerlist[9][0]['rank'], 'ranked stats:',playerlist[9][0]['wins'],'wins and', playerlist[9][0]['losses'], 'losses.')
         print('Bans red: ',[champIdtoName(x) for x in gen2])
-    except:
-        print('Currently not in a game')
-
-
-
-
-getcurrentgamedata('Kirrrra')

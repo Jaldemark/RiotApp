@@ -4,6 +4,7 @@ from seasons import seasonId
 from api import apikey
 from queueId import queueId
 from kda import getkda
+
 def getParId(account,match):
     for key in match.json()['participantIdentities']:
         if key['player']['summonerName']==account:
@@ -22,6 +23,7 @@ def getwin(account, champ):
     count = 0
     kda =[0,0,0]
     index = match2.json()['endIndex']
+    print(index)
     while(count<(match2.json()['endIndex']-1)):
         try:
             gameId = match2.json()['matches'][count]['gameId']
@@ -43,12 +45,13 @@ def getwin(account, champ):
 
                 noobstr = 'K/D/A: '+str(kda[0])+'/'+str(kda[1])+'/'+str(kda[2])
                 print('Game: ',fittcounters,'Win counter: ',wincounter, seasonId(season), 'queue: ', queueId(queuetype), noob)
-                count = count + 1
+            count = count + 1
+
         except Exception as e:
                print(e)
                count = count+1
 
-    kda[0]=kda[0]/index
-    kda[1]=kda[1]/index
-    kda[2]=kda[2]/index
+    kda[0]=kda[0]/fittcounters
+    kda[1]=kda[1]/fittcounters
+    kda[2]=kda[2]/fittcounters
     return [wincounter/fittcounters, kda]
