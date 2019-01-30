@@ -13,7 +13,7 @@ def getcurrentgamedata(account):
         match = response.json()
         url = "https://euw1.api.riotgames.com/lol/league/v4/positions/by-summoner/"+str(encryptedSummonerId(account,1))+"?api_key="+apikey()
         response = requests.get(url)
-        rank= response.json()
+        rank = response.json()
         for player in match['participants']:
             url = "https://euw1.api.riotgames.com/lol/league/v4/positions/by-summoner/"+str(encryptedSummonerId(player['summonerName'],1))+"?api_key="+apikey()
             response = requests.get(url)

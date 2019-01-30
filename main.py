@@ -2,12 +2,10 @@ from getwin import getwin
 
 
 #TODO add player name/id as argument
-def getParId(account):
-    for key in match.json()['participantIdentities']:
-        if key['player']['summonerName']==account:
-            return key['participantId']
+
 
 account= input('Account name: ')
 champ = input("Champion: ")
-print('fitta')
-print('Winrate: ',getwin(account, champ), account, 'on', champ)
+list = getwin(account, champ)
+print('Winrate: ',list[0], account, 'on', champ)
+print(list[1][0],list[1][1],list[1][2])
