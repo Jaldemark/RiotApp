@@ -3,8 +3,8 @@ from championId import ChNameToId
 from championId import champIdtoName
 #from pprint import pprint
 
-print(champIdtoName())
-config = json.loads(open('champion.json',encoding="utf8").read())
-for champ in config['data']:
-    if config['data'][champ]['key'] == '119':
-        print(champ)
+dict1 = {'a':1,'b':2,'c':3}
+dict2 = {'a':5,'b':1,'c':7}
+print(type(dict1['a']))
+dict1['a'] = dict1['a']+dict2['a']
+print(dict1['a'])
