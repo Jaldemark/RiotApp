@@ -14,45 +14,61 @@ def getParId(account,match):
             return key['participantId']
     return 11
 def getwin(account, champ):
-
+    wincounter =0
+    validcounter =0
+    count = 0
+    kda =[0]*3
+    statlist = [0]*7
+    latestgame = True
+    deltalist = []*4
+    #spaghett
+    creeplist = {'0-10':0,'10-20':0,'20-30':0,'30-40':0,'40-50':0,'50-60':0}
+    explist = {'0-10':0,'10-20':0,'20-30':0,'30-40':0,'40-50':0,'50-60':0}
+    goldlist = {'0-10':0,'10-20':0,'20-30':0,'30-40':0,'40-50':0,'50-60':0}
+    deltalist = {'creeplist':creeplist,'explist':explist,'goldlist':goldlist}
     URL = "https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/"+account+"?api_key="+apikey()
     response = requests.get(URL)
     rj = response.json()
     #AccountId visar error ibland av oklar anledning
     URL2 = "https://euw1.api.riotgames.com/lol/match/v4/matchlists/by-account/"+rj['accountId']+"?champion="+str(ChNameToId(champ))+"&api_key="+apikey()
     match2 = requests.get(URL2)
-    wincounter =0
-    fittcounters =0
-    count = 0
-    kda =[0]*3
-    statlist = [0]*7
     index = match2.json()['endIndex']
-    latestgame = True
-    deltalist = []*4
+
     while(count<(match2.json()['endIndex']-1 or count<75)):
-    #    try:
+        try:
             gameId = match2.json()['matches'][count]['gameId']
             season = match2.json()['matches'][count]['season']
             queuetype = match2.json()['matches'][count]['queue']
             URL =  "https://euw1.api.riotgames.com/lol/match/v4/matches/"+str(gameId)+"?api_key="+apikey()
             match = requests.get(URL)
+            timestamp = {'0-10':0,'10-20':0,'20-30':0,'30-40':0,'40-50':0,'50-60':0}
             if getParId(account,match) != 11:
                 if latestgame:
                     latestgamestat = getStats(match,getParId(account,match)-1)
                     latestgame = False
-                    deltalist = getDeltas(match,getParId(account,match)-1)
-                else:
-                    temp = getDeltas(match,getParId(account,match)-1)
-                    deltacount =0
-                    print(deltalist)
-                    newlist = []*3
-                    for dicts in temp:
-                        print(dicts)
-                        for k in dicts:
-                            print(deltalist[deltacount])
-                            newlist[deltacount] = {k, deltalist[deltacount][k] + temp[deltacount][k]}
-                        deltacount +=1
-                    print(newlist)
+            #    else:
+                temp = getDeltas(match,getParId(account,match)-1)
+                print('-------------------------------------------------')
+
+                #all have the same length so doesnt matter which you use but can propably be done in a better way
+                for k in temp['creepsPerMinDeltas']:
+                    print('dicts',k)
+                    if k == '30-end':
+                        s = '30-40'
+                        deltalist['creeplist'][s]  = (deltalist['creeplist'][s]*timestamp[s]+temp['creepsPerMinDeltas'][k])/(timestamp[s]+1)
+                        deltalist['explist'][s]      = (deltalist['explist'][s]*timestamp[s]+temp['xpPerMinDeltas'][k])/(timestamp[s]+1)
+                        deltalist['goldlist'][s]    = (deltalist['goldlist'][s]*timestamp[s]+temp['goldPerMinDeltas'][k])/(timestamp[s]+1)
+                    if 'end' not in k:
+                        timestamp[k] +=1
+                        deltalist['creeplist'][k]  = (deltalist['creeplist'][k]*timestamp[k]+temp['creepsPerMinDeltas'][k])/(timestamp[k]+1)
+                        deltalist['explist'][k]      = (deltalist['explist'][k]*timestamp[k]+temp['xpPerMinDeltas'][k])/(timestamp[k]+1)
+                        deltalist['goldlist'][k]    = (deltalist['goldlist'][k]*timestamp[k]+temp['goldPerMinDeltas'][k])/(timestamp[k]+1)
+                            #if dicts == 'creepsPerMinDeltas':
+                            #    creeplist[k] = (creeplist[k]*(validcounter+1)+temp[dicts][k])/(validcounter+2)
+                            #elif dicts == 'goldPerMinDeltas':
+                            #    goldlist[k] = (goldlist[k]*(validcounter+1)+temp[dicts][k])/(validcounter+2)
+                        #    else:
+                            #    explist[k] = (explist[k]*(validcounter+1)+temp[dicts][k])/(validcounter+2)
 
                 lists_of_lists = [kda, getkda(match.json()['participants'][getParId(account,match)-1]['stats'])]
                 kda = [sum(x) for x in zip(*lists_of_lists)]
@@ -62,18 +78,18 @@ def getwin(account, champ):
 
                 if getParId(account,match) != 11 and match.json()['participants'][getParId(account,match)-1]['stats']['win'] == True:
                     wincounter += 1
-                fittcounters += 1
+                validcounter += 1
                 kdastr = 'K/D/A: '+str(getkda(match.json()['participants'][getParId(account,match)-1]['stats'])[0])+'/'+str(getkda(match.json()['participants'][getParId(account,match)-1]['stats'])[1])+'/'+str(getkda(match.json()['participants'][getParId(account,match)-1]['stats'])[2])
-                print('Game: ',fittcounters,'Win counter: ',wincounter, seasonId(season), 'queue: ', queueId(queuetype), kdastr)
+                print('Game: ',validcounter,'Win counter: ',wincounter, seasonId(season), 'queue: ', queueId(queuetype), kdastr,count)
             count += 1
 
-        #except Exception as e:
-              # print(e)
-               #count = count+1
-    print(statlist[0])
-    kda[:] = [x/fittcounters for x in kda]
-    statlist[:] = [x/fittcounters for x in statlist]
-    return [wincounter/fittcounters, kda, statlist, latestgamestat, dict(c)]
+        except Exception as e:
+               print(e)
+               count = count+1
+               validcounter +=1
+    kda[:] = [x/validcounter for x in kda]
+    statlist[:] = [x/validcounter for x in statlist]
+    return [wincounter/validcounter, kda, statlist, latestgamestat,deltalist,validcounter]
 
 def getkda(match):
     tassist = match['assists']
@@ -93,4 +109,5 @@ def getStats(match,parId):
 
 def getDeltas(match,parId):
     temp = match.json()['participants'][parId]['timeline']
-    return [temp['creepsPerMinDeltas'],temp['xpPerMinDeltas'],temp['goldPerMinDeltas']]
+    return {'creepsPerMinDeltas':temp['creepsPerMinDeltas'],'xpPerMinDeltas':temp['xpPerMinDeltas'],'goldPerMinDeltas':temp['goldPerMinDeltas']}
+    #return [temp['creepsPerMinDeltas'],temp['xpPerMinDeltas'],temp['goldPerMinDeltas']]
