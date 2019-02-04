@@ -33,13 +33,8 @@ def getwin(account, champ):
     URL2 = "https://euw1.api.riotgames.com/lol/match/v4/matchlists/by-account/"+rj['accountId']+"?champion="+str(ChNameToId(champ))+"&api_key="+apikey()
     match2 = requests.get(URL2)
     index = match2.json()['endIndex']
-<<<<<<< HEAD
     latestgame = True
-    deltalist = []*4
-    print(index)
-=======
 
->>>>>>> origin/master
     while(count<(match2.json()['endIndex']-1 or count<75)):
         try:
             gameId = match2.json()['matches'][count]['gameId']
@@ -54,11 +49,8 @@ def getwin(account, champ):
                     latestgame = False
             #    else:
                 temp = getDeltas(match,getParId(account,match)-1)
-                print('-------------------------------------------------')
-
                 #all have the same length so doesnt matter which you use but can propably be done in a better way
                 for k in temp['creepsPerMinDeltas']:
-                    print('dicts',k)
                     if k == '30-end':
                         s = '30-40'
                         deltalist['creeplist'][s]  = (deltalist['creeplist'][s]*timestamp[s]+temp['creepsPerMinDeltas'][k])/(timestamp[s]+1)
@@ -69,13 +61,6 @@ def getwin(account, champ):
                         deltalist['creeplist'][k]  = (deltalist['creeplist'][k]*timestamp[k]+temp['creepsPerMinDeltas'][k])/(timestamp[k]+1)
                         deltalist['explist'][k]      = (deltalist['explist'][k]*timestamp[k]+temp['xpPerMinDeltas'][k])/(timestamp[k]+1)
                         deltalist['goldlist'][k]    = (deltalist['goldlist'][k]*timestamp[k]+temp['goldPerMinDeltas'][k])/(timestamp[k]+1)
-                            #if dicts == 'creepsPerMinDeltas':
-                            #    creeplist[k] = (creeplist[k]*(validcounter+1)+temp[dicts][k])/(validcounter+2)
-                            #elif dicts == 'goldPerMinDeltas':
-                            #    goldlist[k] = (goldlist[k]*(validcounter+1)+temp[dicts][k])/(validcounter+2)
-                        #    else:
-                            #    explist[k] = (explist[k]*(validcounter+1)+temp[dicts][k])/(validcounter+2)
-
                 lists_of_lists = [kda, getkda(match.json()['participants'][getParId(account,match)-1]['stats'])]
                 kda = [sum(x) for x in zip(*lists_of_lists)]
 
@@ -86,26 +71,22 @@ def getwin(account, champ):
                     wincounter += 1
                 validcounter += 1
                 kdastr = 'K/D/A: '+str(getkda(match.json()['participants'][getParId(account,match)-1]['stats'])[0])+'/'+str(getkda(match.json()['participants'][getParId(account,match)-1]['stats'])[1])+'/'+str(getkda(match.json()['participants'][getParId(account,match)-1]['stats'])[2])
-                print('Game: ',validcounter,'Win counter: ',wincounter, seasonId(season), 'queue: ', queueId(queuetype), kdastr,count)
+                print('Game: ',validcounter,'Win counter: ',wincounter, seasonId(season), 'queue: ', queueId(queuetype), kdastr)
             count += 1
 
-<<<<<<< HEAD
-        #except Exception as e:
-              # print(e)
-               #count = count+1
-    print(statlist[0])
-    kda[:] = [x/fittcounters for x in kda]
-    statlist[:] = [x/fittcounters for x in statlist]
-    return [wincounter/fittcounters, kda, statlist, latestgamestat]
-=======
+
         except Exception as e:
                print(e)
                count = count+1
-               validcounter +=1
+
+        #except Exception as e:
+               #print(e)
+               #count = count+1
+               #validcounter +=1
     kda[:] = [x/validcounter for x in kda]
     statlist[:] = [x/validcounter for x in statlist]
     return [wincounter/validcounter, kda, statlist, latestgamestat,deltalist,validcounter]
->>>>>>> origin/master
+
 
 def getkda(match):
     tassist = match['assists']
@@ -126,4 +107,3 @@ def getStats(match,parId):
 def getDeltas(match,parId):
     temp = match.json()['participants'][parId]['timeline']
     return {'creepsPerMinDeltas':temp['creepsPerMinDeltas'],'xpPerMinDeltas':temp['xpPerMinDeltas'],'goldPerMinDeltas':temp['goldPerMinDeltas']}
-    #return [temp['creepsPerMinDeltas'],temp['xpPerMinDeltas'],temp['goldPerMinDeltas']]
