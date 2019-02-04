@@ -29,6 +29,7 @@ def getwin(account, champ):
     index = match2.json()['endIndex']
     latestgame = True
     deltalist = []*4
+    print(index)
     while(count<(match2.json()['endIndex']-1 or count<75)):
     #    try:
             gameId = match2.json()['matches'][count]['gameId']
@@ -73,7 +74,7 @@ def getwin(account, champ):
     print(statlist[0])
     kda[:] = [x/fittcounters for x in kda]
     statlist[:] = [x/fittcounters for x in statlist]
-    return [wincounter/fittcounters, kda, statlist, latestgamestat, dict(c)]
+    return [wincounter/fittcounters, kda, statlist, latestgamestat]
 
 def getkda(match):
     tassist = match['assists']
