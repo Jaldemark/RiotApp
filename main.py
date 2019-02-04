@@ -3,6 +3,7 @@ from currentgame import getcurrentgamedata
 import plotly.offline as pyo
 import plotly.graph_objs as go
 import pandas as pd
+from plotly import tools
 
 mode = input('winrate or livegame?')
 if mode == 'winrate':
@@ -20,22 +21,30 @@ if mode == 'winrate':
     print('Latest Turret kills: ',list[3][4], 'Compared to average:',list[2][4])
     print('Latest Turret damage: ',list[3][5], 'Compared to average:',list[2][5])
     print('Latest Game time in minutes: ',list[3][6]/60, 'Compared to average:',list[2][6]/60)
-    print('Delta:', list[4]['creeplist'], list[5])
-    xvalues =[]
-    yvalues =[]
-    for x in list[4]['creeplist']:
-        xvalues.append(x)
-    for y in list[4]['creeplist'].values():
-        yvalues.append(y)
+    xvalues = []
+    yvalues = [[],[],[]]
+    count = 0
+    for item in list[4]:
+        for x in list[4][item]:
+            xvalues.append(x)
+        for y in list[4][item].values():
+            yvalues[count].append(y)
+        count +=1
 
-    print(xvalues,yvalues)
-    trace = go.Scatter(x=xvalues,y=yvalues,
-                       mode='lines+markers', name='lineAndMarkers')
-    data = [trace]
-    layout = go.Layout(title='Creep per min')
+    trace1 = go.Scatter(x=xvalues,y=yvalues[0],
+                       mode='lines+markers', name='Creep per min')
+    trace2 = go.Scatter(x=xvalues,y=yvalues[1],
+                       mode='lines+markers', name='Xp per min')
+    trace3 = go.Scatter(x=xvalues,y=yvalues[2],
+                       mode='lines+markers', name='Gold per min')
 
-    fig = go.Figure(data,layout)
+    fig = tools.make_subplots(rows=1, cols=3, subplot_titles=('Creep', 'Xp', 'Gold'))
+    fig.append_trace(trace1, 1, 1)
+    fig.append_trace(trace2, 1, 2)
+    fig.append_trace(trace3, 1, 3)
+    fig['layout'].update(height=600, width=1200, title='Delta stats')
     pyo.plot(fig)
+
 elif mode == 'livegame':
     account= input('Account name: ')
     getcurrentgamedata(account)
