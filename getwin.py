@@ -14,29 +14,28 @@ def getParId(account,match):
             return key['participantId']
     return 11
 def getwin(account, champ):
-    wincounter =0
-    validcounter =0
-    count = 0
-    kda =[0]*3
-    statlist = [0]*7
-    latestgame = True
-    deltalist = []*4
-    #spaghett
-    creeplist = {'0-10':0,'10-20':0,'20-30':0,'30-40':0,'40-50':0,'50-60':0}
-    explist = {'0-10':0,'10-20':0,'20-30':0,'30-40':0,'40-50':0,'50-60':0}
-    goldlist = {'0-10':0,'10-20':0,'20-30':0,'30-40':0,'40-50':0,'50-60':0}
-    deltalist = {'creeplist':creeplist,'explist':explist,'goldlist':goldlist}
-    URL = "https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/"+account+"?api_key="+apikey()
-    response = requests.get(URL)
-    rj = response.json()
-    #AccountId visar error ibland av oklar anledning
-    URL2 = "https://euw1.api.riotgames.com/lol/match/v4/matchlists/by-account/"+rj['accountId']+"?champion="+str(ChNameToId(champ))+"&api_key="+apikey()
-    match2 = requests.get(URL2)
-    index = match2.json()['endIndex']
-    latestgame = True
+    try:
+        wincounter =0
+        validcounter =0
+        count = 0
+        kda =[0]*3
+        statlist = [0]*7
+        latestgame = True
+        deltalist = []*4
+        #spaghett
+        creeplist = {'0-10':0,'10-20':0,'20-30':0,'30-40':0,'40-50':0,'50-60':0}
+        explist = {'0-10':0,'10-20':0,'20-30':0,'30-40':0,'40-50':0,'50-60':0}
+        goldlist = {'0-10':0,'10-20':0,'20-30':0,'30-40':0,'40-50':0,'50-60':0}
+        deltalist = {'creeplist':creeplist,'explist':explist,'goldlist':goldlist}
+        URL = "https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/"+account+"?api_key="+apikey()
+        response = requests.get(URL)
+        rj = response.json()
+        URL2 = "https://euw1.api.riotgames.com/lol/match/v4/matchlists/by-account/"+rj['accountId']+"?champion="+str(ChNameToId(champ))+"&api_key="+apikey()
+        match2 = requests.get(URL2)
+        index = match2.json()['endIndex']
+        latestgame = True
 
-    while(count<(match2.json()['endIndex']-1 or count<75)):
-        try:
+        while(count<(match2.json()['endIndex']-1 or count<75)):
             gameId = match2.json()['matches'][count]['gameId']
             season = match2.json()['matches'][count]['season']
             queuetype = match2.json()['matches'][count]['queue']
@@ -47,7 +46,6 @@ def getwin(account, champ):
                 if latestgame:
                     latestgamestat = getStats(match,getParId(account,match)-1)
                     latestgame = False
-            #    else:
                 temp = getDeltas(match,getParId(account,match)-1)
                 #all have the same length so doesnt matter which you use but can propably be done in a better way
                 for k in temp['creepsPerMinDeltas']:
@@ -75,9 +73,9 @@ def getwin(account, champ):
             count += 1
 
 
-        except Exception as e:
-               print(e)
-               count = count+1
+    except Exception as e:
+           print(e)
+           count = count+1
 
         #except Exception as e:
                #print(e)
