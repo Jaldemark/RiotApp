@@ -103,6 +103,7 @@ def currentGameData(n_clicks,summoner_id2_name):
 @app.callback(Output('currentGame','children'),
              [Input('currentGameData','children')])
 def update_currentgame(jsonified_data):
+    
     temp = json.loads(str(jsonified_data))
     return html.Div([
             html.H3('Live game'),
