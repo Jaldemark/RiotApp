@@ -11,7 +11,11 @@ import dash_html_components as html
 from dash.dependencies import Input, Output, State
 import json
 
-
+###
+###
+### Doesnt work unless you have the correct api-key which Im not allowed to share publicly
+###
+###
 app = dash.Dash()
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
@@ -32,6 +36,7 @@ app.layout = html.Div([
                                         html.Div(id='dataframe',style={'display': 'none'})
                                         ]),
                                         html.Div([
+                                            #TODO update this part
                                             html.Div([
                                                 html.H3(),
                                                 dcc.Graph(id='vision-stat-id')
@@ -82,8 +87,6 @@ app.layout = html.Div([
 app.css.append_css({
     'external_url': 'https://codepen.io/chriddyp/pen/bWLwgP.css'
 })
-
-
 @app.callback(Output('dataframe','children'),
              [Input('submit-button','n_clicks')],
              [State('summoner-id','value'),
@@ -103,7 +106,7 @@ def currentGameData(n_clicks,summoner_id2_name):
 @app.callback(Output('currentGame','children'),
              [Input('currentGameData','children')])
 def update_currentgame(jsonified_data):
-    
+
     temp = json.loads(str(jsonified_data))
     return html.Div([
             html.H3('Live game'),
@@ -123,8 +126,6 @@ def update_currentgame(jsonified_data):
             html.Div('Player: '+ temp[0][9][0]['summonerName']+ ' Champion: ' + champIdtoName(temp[1][9])+ ' Rank: ' + temp[0][9][0]['tier'] +' '+ temp[0][9][0]['rank'] + ' ranked stats: ' + str(temp[0][9][0]['wins'])+' wins and '+  str(temp[0][9][0]['losses']) + ' losses. '),
             html.Div('Bans red: ' + str([champIdtoName(x) for x in temp[2][1]]))
     ])
-#    except Exception as e:
-    #    print(e)
 
 
 @app.callback(Output('vision-stat-id','figure'),
