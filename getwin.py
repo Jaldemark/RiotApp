@@ -6,7 +6,9 @@ from queueId import queueId
 from collections import Counter
 from itertools import chain
 from collections import defaultdict
-
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
+import os
 #Doesnt work properly if the player changed name
 def getParId(account,match):
     for key in match.json()['participantIdentities']:
@@ -105,3 +107,10 @@ def getStats(match,parId):
 def getDeltas(match,parId):
     temp = match.json()['participants'][parId]['timeline']
     return {'creepsPerMinDeltas':temp['creepsPerMinDeltas'],'xpPerMinDeltas':temp['xpPerMinDeltas'],'goldPerMinDeltas':temp['goldPerMinDeltas']}
+
+def squaredChampionImage():
+    image_directory = '9.3.1/img/champion'
+    list_of_images=[]
+    for img in os.listdir(image_directory):
+        list_of_images.append(img)
+    return list_of_images

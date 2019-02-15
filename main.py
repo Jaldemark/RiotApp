@@ -1,4 +1,4 @@
-from getwin import getwin
+from getwin import getwin, squaredChampionImage
 from currentgame import getcurrentgamedata
 from championId import champIdtoName
 import plotly.offline as pyo
@@ -22,6 +22,7 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app.config['suppress_callback_exceptions']=True
 #def layout_function():
      #return
+image_list=squaredChampionImage()
 app.layout = html.Div([
                  dcc.Tabs(id="tabs", children=[
                      dcc.Tab(label='Game stats',value='stat-tab', children=[
@@ -74,6 +75,7 @@ app.layout = html.Div([
                             html.Div(id='summoner-box-Div2'),
                             html.Button(id='submit-button2', children='Submit'),
                             html.Div(id='submit-box-Div2'),
+                            html.Img(id='image',value=image_list[0]),
                             html.Div(id='currentGameData',style={'display': 'none'}),
                             html.Div(id='currentGame')
 
@@ -294,6 +296,7 @@ def update_gameduration_Div(jsonified_data):
                          height=500
                         )
     }
+
 
 if __name__ == '__main__':
         app.run_server()
