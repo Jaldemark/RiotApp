@@ -9,6 +9,7 @@ from collections import defaultdict
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import os
+import base64
 #Doesnt work properly if the player changed name
 def getParId(account,match):
     for key in match.json()['participantIdentities']:
@@ -108,9 +109,25 @@ def getDeltas(match,parId):
     temp = match.json()['participants'][parId]['timeline']
     return {'creepsPerMinDeltas':temp['creepsPerMinDeltas'],'xpPerMinDeltas':temp['xpPerMinDeltas'],'goldPerMinDeltas':temp['goldPerMinDeltas']}
 
-def squaredChampionImage():
+def squaredEncodedImage(champion):
+    image_directory = 'assets/9.3.1/img/champion/'
+    # '9.3.1/img/champion'+champion
+    list_of_images=[]
+    dic={" ":"","'":"",".":""}
+    for i, j in dic.items():
+        champion = champion.replace(i, j)
+    if champion == 'Wukong':
+        champion = 'MonkeyKing'
+    image_filename = image_directory+champion+'.png'
+    encoded_image = base64.b64encode(open(image_filename, 'rb').read())
+    trendImage = 'data:image/png;base64,{}'.format(encoded_image.decode())
+    return trendImage
+
+def squaredImageList():
     image_directory = '9.3.1/img/champion'
     list_of_images=[]
     for img in os.listdir(image_directory):
-        list_of_images.append(img)
+        image_filename =image_directory +'/'+ img
+        encoded_image = base64.b64encode(open(image_filename, 'rb').read())
+        list_of_images.append(encoded_image)
     return list_of_images
