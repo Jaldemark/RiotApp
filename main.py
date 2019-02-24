@@ -1,4 +1,4 @@
-from getwin import getwin, squaredEncodedImage, squaredImageList
+from getwin import getwin, squaredEncodedImage, squaredImageList, rankToEmblem
 from currentgame import getcurrentgamedata
 from championId import champIdtoName
 import plotly.offline as pyo
@@ -116,178 +116,227 @@ def update_currentgame(jsonified_data):
 
     temp = json.loads(str(jsonified_data))
     return html.Div(children=[
-            html.H3('Live game'),
+        #    html.H3('Live game'),
             html.Div(children=[
-                    html.H2('Blue team'),
+                html.Div([
+                    html.Div('Blue team'),
                     html.Div(children=[
-                            html.Img(src=squaredEncodedImage(champIdtoName(temp[1][0])),
-                                    style={
-                                    'height' :'4%',
-                                    'width' : '4%',
-                                    'padding-top' : 0,
-                                    'padding-right' : 0,
-                                    'display':'inline-block'}),
-                            html.Div('Player: '+ temp[0][0][0]['summonerName']+  ' Rank: ' + temp[0][0][0]['tier'] +' '+ temp[0][0][0]['rank'] + ' ranked stats: ' + str(temp[0][0][0]['wins'])+' wins and '+  str(temp[0][0][0]['losses']) + ' losses. ',
-                                            style={'display': 'inline-block'})
-                    ]),
+                                    html.Details([
+                                        html.Summary(html.Div([html.Img(src=squaredEncodedImage(champIdtoName(temp[1][0])),
+                                                            style={
+                                                                'height' :'4%',
+                                                                'width' : '4%',
+                                                                'display':'inline-block'
+                                                                }),
+                                                    html.Img(src=rankToEmblem(temp[0][0][0]['tier']),
+                                                            style={
+                                                            'height' :'4%',
+                                                            'width' : '4%',
+                                                            'display':'inline-block'}),
+                                                    html.Div(temp[0][0][0]['summonerName'],style={'display':'inline-block'})],style={'display':'inline-block'})),
+                                        html.Div(' Rank: ' + temp[0][0][0]['tier'].lower().title() +' '+ temp[0][0][0]['rank']),
+                                        html.Div(' ranked stats: ' + str(temp[0][0][0]['wins'])+' wins and '+  str(temp[0][0][0]['losses']) + ' losses. ')
+                                    ],style={'display':'inline-block'})
+                                    ]),#player0
                     html.Div(children=[
-                        html.Img(src=squaredEncodedImage(champIdtoName(temp[1][1])),
-                                style={
-                                'height' :'4%',
-                                'width' : '4%',
-                                'padding-top' : 0,
-                                'padding-right' : 0,
-                                'display':'inline-block'}),
-                        html.Div('Player: '+ temp[0][1][0]['summonerName']+ ' Rank: ' + temp[0][1][0]['tier'] +' '+ temp[0][1][0]['rank'] + ' ranked stats: ' + str(temp[0][1][0]['wins'])+' wins and '+  str(temp[0][1][0]['losses']) + ' losses. ',
-                                style={'display': 'inline-block'})
-                        ]),
+                                html.Details([
+                                    html.Summary(html.Div([html.Img(src=squaredEncodedImage(champIdtoName(temp[1][1])),
+                                                        style={
+                                                            'height' :'4%',
+                                                            'width' : '4%',
+                                                            'display':'inline-block'
+                                                            }),
+                                                html.Img(src=rankToEmblem(temp[0][1][0]['tier']),
+                                                        style={
+                                                        'height' :'4%',
+                                                        'width' : '4%',
+                                                        'display':'inline-block'}),
+                                                html.Div(temp[0][1][0]['summonerName'],style={'display':'inline-block'})],style={'display':'inline-block'})),
+                                    html.Div(' Rank: ' + temp[0][1][0]['tier'].lower().title() +' '+ temp[0][1][0]['rank']),
+                                    html.Div(' ranked stats: ' + str(temp[0][1][0]['wins'])+' wins and '+  str(temp[0][1][0]['losses']) + ' losses. ')
+                                ],style={'display':'inline-block'})
+                                ]),#player1
                     html.Div(children=[
-                        html.Img(src=squaredEncodedImage(champIdtoName(temp[1][2])),
-                                style={
-                                'height' :'4%',
-                                'width' : '4%',
-                                'position' : 'relative',
-                                'padding-top' : 0,
-                                'padding-right' : 0
-                            }),
-                        html.Div('Player: '+ temp[0][2][0]['summonerName']+  ' Rank: ' + temp[0][2][0]['tier'] +' '+ temp[0][2][0]['rank'] + ' ranked stats: ' + str(temp[0][2][0]['wins'])+' wins and '+  str(temp[0][2][0]['losses']) + ' losses. ',
-                                style={'display': 'inline-block'})
-                        ]),
+                                    html.Details([
+                                        html.Summary(html.Div([html.Img(src=squaredEncodedImage(champIdtoName(temp[1][2])),
+                                                            style={
+                                                                'height' :'4%',
+                                                                'width' : '4%',
+                                                                'display':'inline-block'
+                                                                }),
+                                                    html.Img(src=rankToEmblem(temp[0][2][0]['tier']),
+                                                            style={
+                                                            'height' :'4%',
+                                                            'width' : '4%',
+                                                            'display':'inline-block'}),
+                                                    html.Div(temp[0][2][0]['summonerName'],style={'display':'inline-block'})],style={'display':'inline-block'})),
+                                        html.Div(' Rank: ' + temp[0][2][0]['tier'].lower().title() +' '+ temp[0][2][0]['rank']),
+                                        html.Div(' ranked stats: ' + str(temp[0][2][0]['wins'])+' wins and '+  str(temp[0][2][0]['losses']) + ' losses. ')
+                                    ],style={'display':'inline-block'})
+                                ]),#player2
                     html.Div(children=[
-                            html.Img(src=squaredEncodedImage(champIdtoName(temp[1][3])),
-                                style={
-                                'height' :'4%',
-                                'width' : '4%',
-                                'position' : 'relative',
-                                'padding-top' : 0,
-                                'padding-right' : 0}),
-                        html.Div('Player: '+ temp[0][3][0]['summonerName']+' Rank: ' + temp[0][3][0]['tier'] +' '+ temp[0][3][0]['rank'] + ' ranked stats: ' + str(temp[0][3][0]['wins'])+' wins and '+  str(temp[0][3][0]['losses']) + ' losses. ',
-                                style={'display': 'inline-block'})
-                        ]),
+                                html.Details([
+                                    html.Summary(html.Div([html.Img(src=squaredEncodedImage(champIdtoName(temp[1][3])),
+                                                        style={
+                                                            'height' :'4%',
+                                                            'width' : '4%',
+                                                            'display':'inline-block'
+                                                            }),
+                                                html.Img(src=rankToEmblem(temp[0][3][0]['tier']),
+                                                        style={
+                                                        'height' :'4%',
+                                                        'width' : '4%',
+                                                        'display':'inline-block'}),
+                                                html.Div(temp[0][3][0]['summonerName'],style={'display':'inline-block'})],style={'display':'inline-block'})),
+                                    html.Div(' Rank: ' + temp[0][3][0]['tier'].lower().title() +' '+ temp[0][3][0]['rank']),
+                                    html.Div(' ranked stats: ' + str(temp[0][3][0]['wins'])+' wins and '+  str(temp[0][3][0]['losses']) + ' losses. ')
+                                ],style={'display':'inline-block'})
+                                ]),#player3
                     html.Div(children=[
-                        html.Img(src=squaredEncodedImage(champIdtoName(temp[1][4])),
-                                style={
-                                'height' :'4%',
-                                'width' : '4%',
-                                'position' : 'relative',
-                                'padding-top' : 0,
-                                'padding-right' : 0
-                            }),
-                        html.Div('Player: '+ temp[0][4][0]['summonerName']+  ' Rank: ' + temp[0][4][0]['tier'] +' '+ temp[0][4][0]['rank'] + ' ranked stats: ' + str(temp[0][4][0]['wins'])+' wins and '+  str(temp[0][4][0]['losses']) + ' losses. ',
-                        style={'display': 'inline-block'})
-                        ]),
-                        html.Div([
-                            html.Div('Bans:',style={'display':'inline-block'}),
-                                html.Img(src=squaredEncodedImage(champIdtoName(temp[2][0][0])),
-                                        style={
-                                        'height' :'4%',
-                                        'width' : '4%',
-                                        'position' : 'relative',
-                                        'padding-top' : 0,
-                                        'padding-right' : 0,
-                                        'display': 'inline-block'
-                                }),
-                                html.Img(src=squaredEncodedImage(champIdtoName(temp[2][0][1])),
-                                        style={
-                                        'height' :'4%',
-                                        'width' : '4%',
-                                        'position' : 'relative',
-                                        'padding-top' : 0,
-                                        'padding-right' : 0,
-                                        'display': 'inline-block'
-                                }),
-                                html.Img(src=squaredEncodedImage(champIdtoName(temp[2][0][2])),
-                                        style={
-                                        'height' :'4%',
-                                        'width' : '4%',
-                                        'position' : 'relative',
-                                        'padding-top' : 0,
-                                        'padding-right' : 0,
-                                        'display': 'inline-block'
-                                }),
-                                html.Img(src=squaredEncodedImage(champIdtoName(temp[2][0][3])),
-                                        style={
-                                        'height' :'4%',
-                                        'width' : '4%',
-                                        'position' : 'relative',
-                                        'padding-top' : 0,
-                                        'padding-right' : 0,
-                                        'display': 'inline-block'
-                                }),
-                                html.Img(src=squaredEncodedImage(champIdtoName(temp[2][0][4])),
-                                        style={
-                                        'height' :'4%',
-                                        'width' : '4%',
-                                        'position' : 'relative',
-                                        'padding-top' : 0,
-                                        'padding-right' : 0,
-                                        'display': 'inline-block'
-                                })
-                                ])
-            ],style={'display': 'inline-block'}),
-
-            html.Div(children=[
-                    html.H2('Red team'),
-                    html.Div(children=[
-                        html.Img(src=squaredEncodedImage(champIdtoName(temp[1][5])),
-                                style={
-                                'height' :'4%',
-                                'width' : '4%',
-                                'position' : 'relative',
-                                'padding-top' : 0,
-                                'padding-right' : 0
-                            }),
-                        html.Div('Player: '+ temp[0][5][0]['summonerName']+  ' Rank: ' + temp[0][5][0]['tier'] +' '+ temp[0][5][0]['rank'] + ' ranked stats: ' + str(temp[0][5][0]['wins'])+' wins and '+  str(temp[0][5][0]['losses']) + ' losses. ',
-                               style={'display': 'inline-block'})
-                        ]),
-                    html.Div(children=[
-                        html.Img(src=squaredEncodedImage(champIdtoName(temp[1][6])),
-                                style={
-                                'height' :'4%',
-                                'width' : '4%',
-                                'position' : 'relative',
-                                'padding-top' : 0,
-                                'padding-right' : 0
-                            }),
-                        html.Div('Player: '+ temp[0][6][0]['summonerName']+  ' Rank: ' + temp[0][6][0]['tier'] +' '+ temp[0][6][0]['rank'] + ' ranked stats: ' + str(temp[0][6][0]['wins'])+' wins and '+  str(temp[0][6][0]['losses']) + ' losses. ',
-                                  style={'display': 'inline-block'})
-                        ]),
-                    html.Div(children=[
-                        html.Img(src=squaredEncodedImage(champIdtoName(temp[1][7])),
-                                style={
-                                'height' :'4%',
-                                'width' : '4%',
-                                'position' : 'relative',
-                                'padding-top' : 0,
-                                'padding-right' : 0
-                            }),
-                        html.Div('Player: '+ temp[0][7][0]['summonerName']+' Rank: ' + temp[0][7][0]['tier'] +' '+ temp[0][7][0]['rank'] + ' ranked stats: ' + str(temp[0][7][0]['wins'])+' wins and '+  str(temp[0][7][0]['losses']) + ' losses. ',
-                                style={'display': 'inline-block'})
-                        ]),
+                                    html.Details([
+                                        html.Summary(html.Div([html.Img(src=squaredEncodedImage(champIdtoName(temp[1][4])),
+                                                            style={
+                                                                'height' :'4%',
+                                                                'width' : '4%',
+                                                                'display':'inline-block'
+                                                                }),
+                                                    html.Img(src=rankToEmblem(temp[0][4][0]['tier']),
+                                                            style={
+                                                            'height' :'4%',
+                                                            'width' : '4%',
+                                                            'display':'inline-block'}),
+                                                    html.Div(temp[0][4][0]['summonerName'],style={'display':'inline-block'})],style={'display':'inline-block'})),
+                                        html.Div(' Rank: ' + temp[0][4][0]['tier'].lower().title() +' '+ temp[0][4][0]['rank']),
+                                        html.Div(' ranked stats: ' + str(temp[0][4][0]['wins'])+' wins and '+  str(temp[0][4][0]['losses']) + ' losses. ')
+                                    ],style={'display':'inline-block'})
+                                ]),#player4
                     html.Div([
-                        html.Img(src=squaredEncodedImage(champIdtoName(temp[1][8])),
-                                style={
-                                'height' :'4%',
-                                'width' : '4%',
-                                'position' : 'relative',
-                                'padding-top' : 0,
-                                'padding-right' : 0
-                            }),
-                        html.Div('Player: '+ temp[0][8][0]['summonerName']+' Rank: ' + temp[0][8][0]['tier'] +' '+ temp[0][8][0]['rank'] + ' ranked stats: ' + str(temp[0][8][0]['wins'])+' wins and '+  str(temp[0][8][0]['losses']) + ' losses. ',
-                                style={'display': 'inline-block'})
-                        ]),
+                                    html.Div('Bans:',style={'display':'inline-block'}),
+                                        html.Img(src=squaredEncodedImage(champIdtoName(temp[2][0][0])),
+                                                style={
+                                                'height' :'4%',
+                                                'width' : '4%',
+                                                'display': 'inline-block'
+                                        }),
+                                        html.Img(src=squaredEncodedImage(champIdtoName(temp[2][0][1])),
+                                                style={
+                                                'height' :'4%',
+                                                'width' : '4%',
+                                                'display': 'inline-block'
+                                        }),
+                                        html.Img(src=squaredEncodedImage(champIdtoName(temp[2][0][2])),
+                                                style={
+                                                'height' :'4%',
+                                                'width' : '4%',
+                                                'display': 'inline-block'
+                                        }),
+                                        html.Img(src=squaredEncodedImage(champIdtoName(temp[2][0][3])),
+                                                style={
+                                                'height' :'4%',
+                                                'width' : '4%',
+                                                'display': 'inline-block'
+                                        }),
+                                        html.Img(src=squaredEncodedImage(champIdtoName(temp[2][0][4])),
+                                                style={
+                                                'height' :'4%',
+                                                'width' : '4%',
+                                                'display': 'inline-block'
+                                        })
+                                        ]),#bans
+                ],style={'display': 'inline-block'}),
+            ],style={'display': 'inline-block'}),
+            html.Div(children=[
+                html.Div([
+                    html.Div('Red team'),
                     html.Div(children=[
-                        html.Img(src=squaredEncodedImage(champIdtoName(temp[1][9])),
-                                style={
-                                'height' :'4%',
-                                'width' : '4%',
-                                'position' : 'relative',
-                                'padding-top' : 0,
-                                'padding-right' : 0
-                        }),
-                        html.Div('Player: '+ temp[0][9][0]['summonerName']+ ' Rank: ' + temp[0][9][0]['tier'] +' '+ temp[0][9][0]['rank'] + ' ranked stats: ' + str(temp[0][9][0]['wins'])+' wins and '+  str(temp[0][9][0]['losses']) + ' losses. ',
-                            style={'display': 'inline-block'})
-                                ]),
+                        html.Details([
+                            html.Summary(html.Div([html.Img(src=squaredEncodedImage(champIdtoName(temp[1][5])),
+                                                style={
+                                                    'height' :'4%',
+                                                    'width' : '4%',
+                                                    'display':'inline-block'
+                                                    }),
+                                        html.Img(src=rankToEmblem(temp[0][5][0]['tier']),
+                                                style={
+                                                'height' :'4%',
+                                                'width' : '4%',
+                                                'display':'inline-block'}),
+                                        html.Div(temp[0][5][0]['summonerName'],style={'display':'inline-block'})],style={'display':'inline-block'})),
+                            html.Div(' Rank: ' + temp[0][5][0]['tier'].lower().title() +' '+ temp[0][5][0]['rank']),
+                            html.Div(' ranked stats: ' + str(temp[0][5][0]['wins'])+' wins and '+  str(temp[0][5][0]['losses']) + ' losses. ')
+                        ],style={'display':'inline-block'})
+                        ]),#player5
+                    html.Div(children=[
+                            html.Details([
+                                html.Summary(html.Div([html.Img(src=squaredEncodedImage(champIdtoName(temp[1][6])),
+                                                    style={
+                                                        'height' :'4%',
+                                                        'width' : '4%',
+                                                        'display':'inline-block'
+                                                        }),
+                                            html.Img(src=rankToEmblem(temp[0][6][0]['tier']),
+                                                    style={
+                                                    'height' :'4%',
+                                                    'width' : '4%',
+                                                    'display':'inline-block'}),
+                                            html.Div(temp[0][6][0]['summonerName'],style={'display':'inline-block'})],style={'display':'inline-block'})),
+                                html.Div(' Rank: ' + temp[0][6][0]['tier'].lower().title() +' '+ temp[0][6][0]['rank']),
+                                html.Div(' ranked stats: ' + str(temp[0][6][0]['wins'])+' wins and '+  str(temp[0][6][0]['losses']) + ' losses. ')
+                            ],style={'display':'inline-block'})]),#player6
+                    html.Div(children=[
+                            html.Details([
+                                html.Summary(html.Div([html.Img(src=squaredEncodedImage(champIdtoName(temp[1][7])),
+                                                    style={
+                                                        'height' :'4%',
+                                                        'width' : '4%',
+                                                        'display':'inline-block'
+                                                        }),
+                                            html.Img(src=rankToEmblem(temp[0][7][0]['tier']),
+                                                    style={
+                                                    'height' :'4%',
+                                                    'width' : '4%',
+                                                    'display':'inline-block'}),
+                                            html.Div(temp[0][7][0]['summonerName'],style={'display':'inline-block'})],style={'display':'inline-block'})),
+                                html.Div(' Rank: ' + temp[0][7][0]['tier'].lower().title() +' '+ temp[0][7][0]['rank']),
+                                html.Div(' ranked stats: ' + str(temp[0][7][0]['wins'])+' wins and '+  str(temp[0][7][0]['losses']) + ' losses. ')
+                            ],style={'display':'inline-block'})
+                        ]),#player7
+                    html.Div(children=[
+                            html.Details([
+                                html.Summary(html.Div([html.Img(src=squaredEncodedImage(champIdtoName(temp[1][8])),
+                                                    style={
+                                                        'height' :'4%',
+                                                        'width' : '4%',
+                                                        'display':'inline-block'
+                                                        }),
+                                            html.Img(src=rankToEmblem(temp[0][8][0]['tier']),
+                                                    style={
+                                                    'height' :'4%',
+                                                    'width' : '4%',
+                                                    'display':'inline-block'}),
+                                            html.Div(temp[0][8][0]['summonerName'],style={'display':'inline-block'})],style={'display':'inline-block'})),
+                                html.Div(' Rank: ' + temp[0][8][0]['tier'].lower().title() +' '+ temp[0][8][0]['rank']),
+                                html.Div(' ranked stats: ' + str(temp[0][8][0]['wins'])+' wins and '+  str(temp[0][8][0]['losses']) + ' losses. ')
+                            ],style={'display':'inline-block'})
+                        ]),#player8
+                    html.Div(children=[
+                        html.Details([
+                            html.Summary(html.Div([html.Img(src=squaredEncodedImage(champIdtoName(temp[1][9])),
+                                                style={
+                                                    'height' :'4%',
+                                                    'width' : '4%',
+                                                    'display':'inline-block'
+                                                    }),
+                                        html.Img(src=rankToEmblem(temp[0][9][0]['tier']),
+                                                style={
+                                                'height' :'4%',
+                                                'width' : '4%',
+                                                'display':'inline-block'}),
+                                        html.Div(temp[0][9][0]['summonerName'],style={'display':'inline-block'})],style={'display':'inline-block'})),
+                            html.Div(' Rank: ' + temp[0][9][0]['tier'].lower().title() +' '+ temp[0][9][0]['rank']),
+                            html.Div(' ranked stats: ' + str(temp[0][9][0]['wins'])+' wins and '+  str(temp[0][9][0]['losses']) + ' losses. ')
+                        ],style={'display':'inline-block'})
+                                ]),#player9
                     html.Div([
                         html.Div('Bans:',style={'display':'inline-block'}),
                             html.Img(src=squaredEncodedImage(champIdtoName(temp[2][1][0])),
@@ -335,8 +384,9 @@ def update_currentgame(jsonified_data):
                                     'padding-right' : 0,
                                     'display': 'inline-block'
                             })
-                            ])
-                ],style={'display': 'inline-block'})
+                            ])#bans
+                ],style={'display': 'inline-block'}),
+            ],style={'display': 'inline-block'})
     ])
 
 

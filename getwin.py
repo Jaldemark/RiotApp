@@ -124,10 +124,17 @@ def squaredEncodedImage(champion):
     return trendImage
 
 def squaredImageList():
-    image_directory = '9.3.1/img/champion'
+    image_directory = 'assets/9.3.1/img/champion'
     list_of_images=[]
     for img in os.listdir(image_directory):
         image_filename =image_directory +'/'+ img
         encoded_image = base64.b64encode(open(image_filename, 'rb').read())
         list_of_images.append(encoded_image)
     return list_of_images
+
+def rankToEmblem(the_rank):
+    temp = the_rank.lower().title()
+    image_directory = 'emblem_rank/Emblem_'+temp+'.png'
+    encoded_image = base64.b64encode(open(image_directory, 'rb').read())
+    trendImage = 'data:image/png;base64,{}'.format(encoded_image.decode())
+    return trendImage

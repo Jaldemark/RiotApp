@@ -20,6 +20,7 @@ def getcurrentgamedata(account):
             url = "https://euw1.api.riotgames.com/lol/league/v4/positions/by-summoner/"+str(encryptedSummonerId(player['summonerName'],1))+"?api_key="+apikey()
             response = requests.get(url)
             rank= response.json()
+            print(player['gameCustomizationObjects'])
             if len(rank)==0:
                 playerlist.append([{'summonerName':player['summonerName'],'tier':'unranked','rank':'unranked','wins':'unknown','losses':'unknown'}])
             else:
